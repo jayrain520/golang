@@ -78,7 +78,7 @@ Streaming media server json config
       },
       
      "local_storage_path": {
-     "local_video_path": "./videos/"     //本地文件的储存位置
+     "local_video_path": "./videos/"     //本地视频文件的储存位置
      },
 
       "server_address": {
@@ -97,7 +97,7 @@ Streaming media server json config
      },
   
     "elastic_search": {
-    "open_elastic": false,              //是否开启
+    "open_elastic": false,              //是否启用elasticsearch
     "init_data_number": 10,             //把数据库里的数据缓存到elasticsearch
     "set_sniff": false,
     "address": "http://127.0.0.1:9200",
@@ -105,8 +105,9 @@ Streaming media server json config
     "type": "info"
      },
 
+	//使用邮箱发送验证码，需要配置自己的QQ邮箱
      "QQ_Email": {
-     "email_title": "Your Verification Code:",
+    "email_title": "Your Verification Code:",
     "email_user": "",                  //邮箱的账户
     "email_accesskey": "",             //邮箱的授权码     
     "email_host": "smtp.qq.com",
