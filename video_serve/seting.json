@@ -1,0 +1,60 @@
+{
+
+  "logger": {
+    "level": "DEBG"
+  },
+
+  "mysql": {
+      "db_connect_address":"127.0.0.1",
+     "set_max_open_conns": 10,
+     "set_max_idle_conns": 20,
+      "db_name":"video_server",
+      "user_name":"root",
+      "port":"3306",
+      "password":"",
+      "charset":"utf-8"
+  },
+
+  "local_storage_path": {
+    "local_video_path": "./videos/"
+  },
+
+  "server_address": {
+    "src_bind": "127.0.0.1:8081",
+    "server_run_port": "8081"
+  },
+
+  "aliyun_oss_storage": {
+    "open_oss_serve": false,
+    "oss_videos_path": "videos/",
+    "bucket_name": "",
+    "resource_address": "https://jay-video.oss-cn-hongkong.aliyuncs.com/videos/",
+    "end_point": "",
+    "access_key_id":"",
+    "access_key_secret": ""
+  },
+
+
+  "elastic_search": {
+    "open_elastic": false,
+    "init_data_number": 10,
+    "set_sniff": false,
+    "address": "http://127.0.0.1:9200",
+    "index": "video",
+    "type": "info"
+  },
+
+  "QQ_Email": {
+    "email_title": "Your Verification Code:",
+    "email_user": "",
+    "email_accesskey": "",
+    "email_host": "smtp.qq.com",
+    "email_port": 25
+  }
+
+
+}
+
+
+
+

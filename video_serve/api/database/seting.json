@@ -1,0 +1,51 @@
+{
+
+  "logger": {
+    "level": "DEBG"
+  },
+
+  "mysql": {
+      "db_connect_address":"127.0.0.1",
+      "db_name":"video_server",
+      "user_name":"root",
+      "port":"3306",
+      "password":"shijie",
+      "charset":"utf-8"
+  },
+
+  "local_storage_path": {
+    "local_image_path": "./images/",
+    "local_video_path": "./videos/"
+  },
+
+  "server_address": {
+    "src_bind": "127.0.0.1:8081",
+    "server_run_port": "8081"
+  },
+
+  "aliyun_oss_storage": {
+    "open_oss_serve": true,
+    "oss_images_path": "images/",
+    "oss_videos_path": "videos/",
+    "bucket_name": "jay-video",
+    "end_point": "https://oss-cn-hongkong.aliyuncs.com/",
+    "access_key_id":"LTAI4Fg45wb3jGKP7R63ttr1",
+    "access_key_secret": "xdypZpsSZzUiG6qBUPetvI0yiJWTGV"
+  },
+
+
+  "elastic_search": {
+    "open_elastic": true,
+    "init_data_number": 1000,
+    "set_sniff": false,
+    "address": "http://127.0.0.1:9200",
+    "index": "video",
+    "type": "info"
+  }
+
+
+}
+
+
+
+
