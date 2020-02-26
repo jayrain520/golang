@@ -53,8 +53,13 @@ API interface
     }
     
     
-json config 
+Streaming media server json config 
 ----
+
+日志的等级
+![log_level](https://github.com/jayrain520/golang/blob/master/image/log_level.png)
+
+
      {
   
     "logger": {
