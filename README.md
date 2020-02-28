@@ -1,7 +1,7 @@
 Go Streaming media server 
 =====
 
-API interface: 项目的简单展示地址：http://jayrain.cn/
+API interface: 项目的简单展示地址：http://jayrain.cn/static/video.html
 -----
     func main() {
 	//gin.SetMode(gin.ReleaseMode)
