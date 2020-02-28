@@ -1,7 +1,7 @@
 Go Streaming media server 
 =====
 
-API interface
+API interface: 项目的简单展示地址：http://jayrain.cn/
 -----
     func main() {
 	//gin.SetMode(gin.ReleaseMode)
@@ -57,7 +57,7 @@ Streaming media server json config
 ----
 
 日志的等级
-![log_level](https://github.com/jayrain520/golang/blob/master/image/log_level.png)
+![log_level](https://github.com/jayrain520/golang/blob/master/image/log_level.jpg)
 
 
      {
