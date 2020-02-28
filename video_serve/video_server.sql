@@ -11,7 +11,7 @@ email varchar(64) unique key not null
 create table video_info(
 id int unsigned primary key auto_increment,
 vid text not null,
-author_name varchar(64) unique key not null,
+author_name varchar(64)  not null,
 title varchar(30) not null,
 sub_tag tinyint unsigned not null,
 parent_tag tinyint unsigned not null,
