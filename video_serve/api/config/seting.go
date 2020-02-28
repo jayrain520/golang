@@ -21,6 +21,8 @@ type Seting struct {
 	Charset          string `json:"charset"`
 	SetMaxOpenConns	 int64  `json:"set_max_open_conns"`
 	SetMaxIdleConns  int64  `json:"set_max_idle_conns"`
+
+
 	//local storage path
 	VideoSavePath string `json:"local_video_path"`
 
@@ -50,13 +52,12 @@ type Seting struct {
 	ElsClient      *elastic.Client
 	Address        string `json:"address"`
 
-
 	//email config
-	EmailTitle string `json:"email_title"`
-	EmailUser string `json:"email_user"`
+	EmailTitle     string `json:"email_title"`
+	EmailUser      string `json:"email_user"`
 	EmailAccesskey string `json:"email_accesskey"`
-	EmailHost string `json:"email_host"`
-	EmailPort int64 `json:"email_port"`
+	EmailHost      string `json:"email_host"`
+	EmailPort      int64  `json:"email_port"`
 }
 
 var (

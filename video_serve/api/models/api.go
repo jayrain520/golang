@@ -36,7 +36,7 @@ type DataBase interface {
 	DeleteUser(username string, pwd string) error
 	DeleteVideo(vid string) error
 	DeleteExpireSessionID(sid string) error
-	DeleteComment(vid ,content string) error
+	DeleteComment(vid, content string) error
 
 	InitElasticData() error
 }

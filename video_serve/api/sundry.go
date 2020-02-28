@@ -40,18 +40,40 @@ var (
 	//global variable configure
 	globalVar = make(map[string]interface{})
 
-
-
 	//QQ email
-    emailBody = bytes.Buffer{}
-    //ready send email
-    email = gomail.NewMessage()
+	emailBody = bytes.Buffer{}
+	//ready send email
+	email = gomail.NewMessage()
+
+	//send email body
+	body = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JayRain</title>
+</head>
+<body>
+<div class="top"></div>
+<div class="main">
+    <div>
+        <h2 >Dear sir. /Madam: </h2>
+    <p>Thank You for Your use . Your Verification Code:&nbsp;&nbsp;&nbsp;
+        <span style="color: lightskyblue">{{.Code}}</span></p>
+    </div>
+
+    <div>
+     <p>Thanks, The JayRain Team</p>
+    </div>
+</div>
+</body>
+</html>
+`
 
 )
 
 func init() {
-	if config.Set.OpenElastic{
-		if err = conn.InitElasticData();err!=nil{
+	if config.Set.OpenElastic {
+		if err = conn.InitElasticData(); err != nil {
 			logger.Warn(err)
 		}
 
@@ -98,15 +120,15 @@ func Transcoding(vid string) error {
 		cmd := exec.Command("/bin/bash", "-c", command)
 		cmd.Stderr = &err
 		_ = cmd.Run()
-		if e:=index(err.Bytes(),[]byte("未找到命令"));e!=nil {
+		if e := index(err.Bytes(), []byte("未找到命令")); e != nil {
 			logger.Debug(err.String())
 			return errors.New("Not Found ffmpeg . Please install ffmpeg Tools")
 		}
-	}else {
-		cmd := exec.Command("cmd", "/C",command)
+	} else {
+		cmd := exec.Command("cmd", "/C", command)
 		cmd.Stderr = &err
 		_ = cmd.Run()
-		if e:=index(err.Bytes(),[]byte("不是内部或外部命令，也不是可运行的程序或批处理文件"));e!=nil{
+		if e := index(err.Bytes(), []byte("不是内部或外部命令，也不是可运行的程序或批处理文件")); e != nil {
 			logger.Debug(err.String())
 			return errors.New("Not Found ffmpeg . Please install ffmpeg Tools")
 		}
@@ -115,15 +137,15 @@ func Transcoding(vid string) error {
 	return nil
 }
 
-func sendEmail(emailAddr string)(map[string]interface{},error){
+func sendEmail(emailAddr string) (map[string]interface{}, error) {
 	result := database.Re.FindAllString(emailAddr, -1)
 	var em string
 	for _, i := range result {
 		em += i
 	}
-	if em!=""{
-		t,err:=template.ParseFiles("./email.html")
-		code:=randCode()
+	if em != "" {
+		t, err := template.ParseFiles(body)
+		code := randCode()
 		_ = t.Execute(&emailBody, code)
 
 		email.SetHeader(`From`, config.Set.EmailUser)
@@ -135,11 +157,11 @@ func sendEmail(emailAddr string)(map[string]interface{},error){
 			DialAndSend(email)
 
 		if err != nil {
-			return nil,err
+			return nil, err
 		}
-		return code,nil
-	}else {
-		return nil,errors.New("invalid email:"+em)
+		return code, nil
+	} else {
+		return nil, errors.New("invalid email:" + em)
 	}
 }
 
@@ -150,20 +172,19 @@ func randCode() map[string]interface{} {
 	return code
 }
 
-
-func index(p,s []byte) error {
+func index(p, s []byte) error {
 
 	var slice []byte
-	for _,b:=range p{
-		for i:=0;i<len(s);i++{
-			if b == s[i]{
-				slice = append(slice,s[i])
+	for _, b := range p {
+		for i := 0; i < len(s); i++ {
+			if b == s[i] {
+				slice = append(slice, s[i])
 			}
 		}
 	}
-	if len(slice) >0{
+	if len(slice) > 0 {
 		return errors.New("happened err")
-	}else {
+	} else {
 		return nil
 	}
 }

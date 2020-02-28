@@ -5,6 +5,8 @@ import (
 	_ "fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/wonderivan/logger"
+	"html/template"
+	"net/http"
 	"testgin/api/config"
 	"testgin/api/response"
 	"time"
@@ -14,47 +16,55 @@ func main() {
 	//gin.SetMode(gin.ReleaseMode)
 	server := gin.Default()
 
+	server.StaticFS("/static", http.Dir("./static"))
+	server.GET("/", func(c *gin.Context) {
+		t,_:=template.ParseFiles("./static/index.html")
+		_ = t.Execute(c.Writer, nil)
+	})
+
+
+
+
 	api := server.Group("/api")
 	{
 
-		api.POST("/set/global/variable", SetGlobalVariable)
+		//api.POST("/set/global/variable", SetGlobalVariable)
 		api.POST("/add/comment", AddComment)
 		api.POST("/login", login)
 		api.POST("/register", register)
-		api.POST("/add/tag", addTag)
-		api.POST("/check/email",checkEmail)
-
+		//api.POST("/add/tag", addTag)
+		//api.POST("/check/email", checkEmail)
 
 		//post file to server local storage
 		api.POST("/add/video", addVideoMiddleware, addVideo)
 
 		//post file to aliyun oss storage serve
-		api.POST("/add/video/to/oss", addVideoMiddleware, AddVideoToOss)
+		//api.POST("/add/video/to/oss", addVideoMiddleware, AddVideoToOss)
 
 		//delete aliyun oss storage file
-		api.DELETE("/delete/oss/file", DeleteFileOss)
+		//api.DELETE("/delete/oss/file", DeleteFileOss)
 		//delete server local video and  image file
-		api.DELETE("/delete/local/video/", DeleteLocalVideo)
+		//api.DELETE("/delete/local/video/", DeleteLocalVideo)
 		//delete comment
-		api.DELETE("/delete/comment", DeleteComment)
+		//api.DELETE("/delete/comment", DeleteComment)
 
-		api.DELETE("/delete/user", DeleteUser)
-
+		//api.DELETE("/delete/user", DeleteUser)
 
 		api.GET("/all/src/:src", Src)
-		api.GET("/load/tag", loadTag)
+		//api.GET("/load/tag", loadTag)
 
-		api.GET("/load/user/all/video/:user-name/:from/:to", loadUserAllVideos)
+		//api.GET("/load/user/all/video/:user-name/:from/:to", loadUserAllVideos)
 		api.GET("/load/all/video/:number", loadAllVideo)
-		api.GET("/check/session/:user-name", checkSession)
+		//api.GET("/check/session/:user-name", checkSession)
 
 		//get video comment
 		api.GET("/load/video/comment", LoadVideoComment)
-		api.GET("/load/self/comment", LoadSelfComment)
+		//api.GET("/load/self/comment", LoadSelfComment)
 
-		api.GET("/video/info", ElasticSearch)
-
+		//api.GET("/video/info", ElasticSearch)
 	}
+
+
 
 	server.Run(":" + config.Set.BindPort)
 }

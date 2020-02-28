@@ -14,7 +14,7 @@ var (
 func init() {
 	dbConn, err = sql.Open("mysql", config.Set.UserName+":"+
 		config.Set.PassWord+"@tcp("+config.Set.DbConnectAddress+
-		":"+config.Set.Port+")/"+config.Set.DbName+"?charset="+config.Set.Charset) //?charset=utf-8 config.Set.Charset
+		":"+config.Set.Port+")/"+config.Set.DbName) //?charset=utf-8 config.Set.Charset
 	if err != nil {
 		panic(err)
 	}

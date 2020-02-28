@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/wonderivan/logger"
 	"sync"
+	"testgin/api/config"
 	"testgin/api/models"
 	"time"
 )
@@ -11,6 +12,9 @@ var allSession *sync.Map
 
 func init() {
 	loadAllSession()
+	if config.Set.OpenElastic{
+		_ = conn.InitElasticData()
+	}
 }
 
 func loadAllSession() {

@@ -13,32 +13,28 @@ import (
 )
 
 var (
-
 	MaxParentID = 20
 	MaxSubID    = 31
 	InvalidID   = errors.New("MaxParentID:1-" + strconv.Itoa(MaxParentID) + " , MaxSubID:21-" + strconv.Itoa(MaxSubID))
-	Re 			= regexp.MustCompile("[0-9]+@[0-9a-zA-Z]+.com")
+	Re          = regexp.MustCompile("[0-9]+@[0-9a-zA-Z]+.com")
 )
 
 type DataBaseOperation struct {
 	dbConnect *sql.DB
 }
 
-func init() {
-	initializationID()
 
-}
 
-func initializationID() {
+func (d *DataBaseOperation) initializationID() {
 	var count int = 0
-	stmtQuery, _ := dbConn.Prepare("select type_id from video_type where type_id > 20")
+	stmtQuery, _ := d.dbConnect.Prepare("select type_id from video_type where type_id > 20")
 	rows, _ := stmtQuery.Query()
 	for rows.Next() {
 		count++
 	}
 	MaxSubID = 20 + count
 	count = 0
-	stmtQuery, _ = dbConn.Prepare("select type_id from video_type where type_id < 21")
+	stmtQuery, _ = d.dbConnect.Prepare("select type_id from video_type where type_id < 21")
 	rows, _ = stmtQuery.Query()
 	for rows.Next() {
 		count++
@@ -80,7 +76,7 @@ func (d *DataBaseOperation) CheckVideoInfo(vid string) (*models.VInfo, error) {
 	}
 	defer stmtQuery.Close()
 	var v models.VInfo
-	err = stmtQuery.QueryRow(vid).Scan(&v.ID,&v.Vid, &v.AuthorName, &v.Title, &v.Class, &v.SubClass)
+	err = stmtQuery.QueryRow(vid).Scan(&v.ID, &v.Vid, &v.AuthorName, &v.Title, &v.Class, &v.SubClass)
 	if err != nil {
 		return &v, err
 	}
@@ -156,7 +152,7 @@ func (d *DataBaseOperation) LoadAllComments(vid string, from, to string) (*[]mod
 		return nil, err
 	}
 	defer stmtQuery.Close()
-	rows, err := stmtQuery.Query(vid,from,to)
+	rows, err := stmtQuery.Query(vid, from, to)
 	if err != nil {
 		return nil, err
 	}
@@ -263,7 +259,7 @@ func (d *DataBaseOperation) AddNewComments(vid string, userName, content string)
 	return nil
 }
 
-func (d *DataBaseOperation) AddNewVideoInfo(vid string, authorName string, title string,  ParentID, SubID int) error {
+func (d *DataBaseOperation) AddNewVideoInfo(vid string, authorName string, title string, ParentID, SubID int) error {
 	if ParentID < 0 || ParentID > MaxParentID || SubID > MaxSubID || SubID < 21 {
 		return InvalidID
 	}
@@ -375,13 +371,13 @@ func (d *DataBaseOperation) DeleteExpireSessionID(sid string) error {
 
 }
 
-func (d *DataBaseOperation) DeleteComment(vid ,content string) error {
+func (d *DataBaseOperation) DeleteComment(vid, content string) error {
 	stmtDel, err := d.dbConnect.Prepare("delete from comments where video_id = ? and content = ?")
 	if err != nil {
 		return err
 	}
 	defer stmtDel.Close()
-	_, err = stmtDel.Exec(vid,content)
+	_, err = stmtDel.Exec(vid, content)
 	if err != nil {
 		return err
 	}

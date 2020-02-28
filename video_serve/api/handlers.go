@@ -170,7 +170,6 @@ func register(c *gin.Context) {
 		return
 	}
 
-
 	limitN := []rune(newUser.Name)
 	if len(limitN) < 3 || len(limitN) > 12 {
 		logger.Debug("User Name Not be Smaller 3 or More 12: %v", len(limitN))
@@ -261,7 +260,6 @@ func addVideo(c *gin.Context) {
 		return
 	}
 
-
 	file, err := c.FormFile("file")
 	if err != nil {
 		logger.Error("Get Post File Failed: %v%v", err)
@@ -277,10 +275,9 @@ func addVideo(c *gin.Context) {
 		return
 	}
 
-
 	vid := models.NewUUID()
 	err = c.SaveUploadedFile(file, config.Set.VideoSavePath+vid)
-	if err!= nil {
+	if err != nil {
 		removeResource(vid)
 		logger.Error(err)
 		responseError(c, response.IntervalErr)
@@ -347,7 +344,7 @@ func AddVideoToOss(c *gin.Context) {
 
 	//start download video and image
 	file, err := c.FormFile("file")
-	if err !=  nil {
+	if err != nil {
 		logger.Error(err)
 		responseError(c, response.IntervalErr)
 		return
@@ -361,10 +358,9 @@ func AddVideoToOss(c *gin.Context) {
 		return
 	}
 
-
 	vid := models.NewUUID()
 	err = c.SaveUploadedFile(file, config.Set.VideoSavePath+vid)
-	if err!=nil {
+	if err != nil {
 		removeResource(vid)
 		logger.Error(err)
 		responseError(c, response.IntervalErr)
@@ -392,7 +388,7 @@ func AddVideoToOss(c *gin.Context) {
 	//delete local resource
 	removeResource(vid)
 	video_link := "https://jay-video.oss-cn-hongkong.aliyuncs.com/videos/" + vid + ".mp4"
-	err = conn.AddNewVideoInfo(video_link, authorNmae, title ,parentID, subID)
+	err = conn.AddNewVideoInfo(video_link, authorNmae, title, parentID, subID)
 	if err != nil {
 		logger.Error(err)
 		responseError(c, response.IntervalErr)
@@ -489,12 +485,11 @@ func DeleteFileOss(c *gin.Context) {
 		return
 	}
 
-	if err=conn.DeleteVideo(info.Vid);err!=nil{
+	if err = conn.DeleteVideo(info.Vid); err != nil {
 		logger.Error(err)
-		responseError(c,response.IntervalErr)
+		responseError(c, response.IntervalErr)
 		return
 	}
-
 
 	if config.Set.OpenElastic {
 		if err = deleteElasticData(info.Vid); err != nil {
@@ -542,19 +537,19 @@ func DeleteLocalVideo(c *gin.Context) {
 
 func DeleteComment(c *gin.Context) {
 	vid := c.PostForm("vid")
-	content:=c.PostForm("content")
+	content := c.PostForm("content")
 	if vid == "" {
 		logger.Debug("Delete vid is empty")
 		responseError(c, response.RequestInvalid)
 		return
 	}
-	info,err:=conn.CheckVideoInfo(vid)
-	if err!=nil{
+	info, err := conn.CheckVideoInfo(vid)
+	if err != nil {
 		logger.Error(err)
-		responseError(c,response.RequestInvalid)
+		responseError(c, response.RequestInvalid)
 		return
 	}
-	err = conn.DeleteComment(info.ID,content)
+	err = conn.DeleteComment(info.ID, content)
 	if err != nil {
 		logger.Error(err)
 		responseError(c, response.RequestInvalid)
@@ -591,7 +586,7 @@ func DeleteUser(c *gin.Context) {
 
 func LoadVideoComment(c *gin.Context) {
 	vid := c.Query("vid")
-	from:=c.Query("from")
+	from := c.Query("from")
 	to := c.Query("to")
 	if err != nil {
 		logger.Error("Parse to int Failed: %v", err)
@@ -599,15 +594,15 @@ func LoadVideoComment(c *gin.Context) {
 		return
 	}
 
-	info,err:=conn.CheckVideoInfo(vid)
+	info, err := conn.CheckVideoInfo(vid)
 
-	if err!=nil{
+	if err != nil {
 		logger.Error("Parse to int Failed: %v", err)
 		responseError(c, response.RequestInvalid)
 		return
 	}
 	//Always load comments to now from two weeks ago
-	listComment, err := conn.LoadAllComments(info.ID, from,to)
+	listComment, err := conn.LoadAllComments(info.ID, from, to)
 	if err != nil {
 		logger.Error(err)
 		responseError(c, response.IntervalErr)
@@ -625,28 +620,28 @@ func AddComment(c *gin.Context) {
 	vid := c.PostForm("vid")
 
 	if content == "" || userName == "" || vid == "" {
-		logger.Debug(content,userName,vid)
+		logger.Debug(content, userName, vid)
 		logger.Debug("Submit Content or user name or vid is empty")
 		responseError(c, response.RequestInvalid)
 		return
 	}
-	info,err:=conn.CheckVideoInfo(vid)
-	if err!=nil{
-		responseError(c,response.RequestInvalid)
-		return
-	}
-	if session,ok:=isExists(userName);!ok{
-		responseError(c,response.RequestInvalid)
-		return
-	}else {
-		err = conn.AddNewComments(info.ID, session.UserName, content)
+	info, err := conn.CheckVideoInfo(vid)
 	if err != nil {
-		logger.Error(err)
-		responseError(c, response.IntervalErr)
+		responseError(c, response.RequestInvalid)
 		return
 	}
+	if session, ok := isExists(userName); !ok {
+		responseError(c, response.RequestInvalid)
+		return
+	} else {
+		err = conn.AddNewComments(info.ID, session.UserName, content)
+		if err != nil {
+			logger.Error(err)
+			responseError(c, response.IntervalErr)
+			return
+		}
 
-	responseNormal(c, response.Success)
+		responseNormal(c, response.Success)
 	}
 
 }
@@ -655,7 +650,7 @@ func LoadSelfComment(c *gin.Context) {
 	userName := c.Query("user_name")
 	from, err := strconv.Atoi(c.Query("from"))
 	to, err := strconv.Atoi(c.Query("to"))
-	if err != nil || userName ==""{
+	if err != nil || userName == "" {
 		logger.Debug("Parse to int Failed: %v", err)
 		responseError(c, response.RequestInvalid)
 		return
@@ -689,15 +684,15 @@ func ElasticSearch(c *gin.Context) {
 
 }
 
-func checkEmail(c *gin.Context)  {
-	emailAddr:=c.PostForm("email_addr")
-	result,err:=sendEmail(emailAddr)
-	if err!=nil{
-		responseError(c,response.Resp{
+func checkEmail(c *gin.Context) {
+	emailAddr := c.PostForm("email_addr")
+	result, err := sendEmail(emailAddr)
+	if err != nil {
+		responseError(c, response.Resp{
 			ResponseCode: 400,
-			ResponseMsg:  fmt.Sprintf("%s",err),
+			ResponseMsg:  fmt.Sprintf("%s", err),
 		})
 		return
 	}
-	responseNormal(c,result)
+	responseNormal(c, result)
 }
