@@ -618,9 +618,9 @@ func AddComment(c *gin.Context) {
 	content := c.PostForm("content")
 	userName := c.PostForm("user_name")
 	vid := c.PostForm("vid")
-
+	logger.Debug(content, userName, vid)
 	if content == "" || userName == "" || vid == "" {
-		logger.Debug(content, userName, vid)
+
 		logger.Debug("Submit Content or user name or vid is empty")
 		responseError(c, response.RequestInvalid)
 		return
@@ -631,7 +631,7 @@ func AddComment(c *gin.Context) {
 		return
 	}
 	if session, ok := isExists(userName); !ok {
-		responseError(c, response.RequestInvalid)
+		responseError(c, response.ExpireSession)
 		return
 	} else {
 		err = conn.AddNewComments(info.ID, session.UserName, content)
