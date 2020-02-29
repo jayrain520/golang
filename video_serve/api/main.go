@@ -16,15 +16,7 @@ func main() {
 	//gin.SetMode(gin.ReleaseMode)
 	server := gin.Default()
 
-	server.StaticFS("/static", http.Dir("./static"))
-	server.GET("/", func(c *gin.Context) {
-		t,_:=template.ParseFiles("./static/index.html")
-		_ = t.Execute(c.Writer, nil)
-	})
-
-
-
-
+	
 	api := server.Group("/api")
 	{
 
